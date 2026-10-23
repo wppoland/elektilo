@@ -4,7 +4,7 @@ Tags: woocommerce, product finder, product quiz, product recommendation, guided 
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 1.1.5
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,11 +12,11 @@ A step-by-step product finder quiz for WooCommerce: guided single-choice questio
 
 == Description ==
 
-Elektilo adds a guided "help me choose" quiz to any page with the `[elektilo]` shortcode. Shoppers answer a short series of single-choice questions and are shown one recommended product, with its image, price and a button straight to the product page.
+Elektilo adds a guided "help me choose" quiz to any page with the `[elektilo]` shortcode. Shoppers answer a short series of single-choice questions and are shown one recommended product, with its image, price and a button straight to the product page. A simple product also gets WooCommerce's own add-to-cart button on the card.
 
 Elektilo is developed in the open. The code, and a place to report bugs or request features, live at [github.com/wppoland/plogins-finder](https://github.com/wppoland/plogins-finder).
 
-You define the questions and options, then map every answer combination to a product. A "Generate combinations" button builds the map for you from your steps, so you only pick a product for each path.
+You define the questions and options, then map every answer combination to a product. A "Generate combinations" button builds the map for you from your steps, so you only pick a product for each path. Set a step to "Any" in a row and that one row covers every answer to it, so a quiz where only some answers matter needs far fewer rows.
 
 = Documentation and links =
 
@@ -39,7 +39,7 @@ A WooCommerce-capability settings page (Elektilo menu) lets you:
 
 * Enable or disable the quiz, set the heading, sub-heading and accent colour, and choose whether the price shows on the result card.
 * Build the steps: each step is one question with single-choice options; the option "value" is a short slug used to identify the answer.
-* Map results: generate one row per answer combination from your steps, then pick the recommended product for each, with an optional headline, description and button label. An at-a-glance callout shows how many combinations still need a product.
+* Map results: generate one row per answer combination from your steps, then pick the recommended product for each, with an optional headline, description and button label. Set any step in a row to "Any" to cover all of its answers: an exact row wins, then the row with the fewest "Any" steps, then the row higher in the list. An at-a-glance callout shows how many combinations still need a product.
 * Set a fallback product shown when no combination matches or a mapped product is unavailable.
 
 = Translation ready =
@@ -77,7 +77,7 @@ As many steps as you like, each with as many single-choice options as you like. 
 
 = What happens at the end? =
 
-The shopper sees one recommended product, its image, optional price, an optional headline and description, and a button to the product page. If no combination matches, or the mapped product is unavailable, your fallback product is shown.
+The shopper sees one recommended product, its image, optional price, an optional headline and description, and a button to the product page. For a simple product in stock there is also an add-to-cart button, which adds it without leaving the page where WooCommerce AJAX add-to-cart is enabled; variable products keep only the link, as the variation is chosen on the product page. If no combination matches, or the mapped product is unavailable, your fallback product is shown.
 
 = Is the price on the result always up to date? =
 
@@ -100,6 +100,10 @@ Elektilo does not connect to, or send any data to, any external service or third
 All data stays inside your WordPress database: the questions, options, results map and settings live in the `finder_settings` option (with `finder_db_version` tracking the schema). When a shopper finishes the quiz, their answers are sent in a same-origin REST request to your site's own `/wp-json/` endpoint, which returns the recommendation; no outbound HTTP request is ever made. The current step and answers are also kept in the page URL and the browser's per-tab session storage so the quiz is resumable. Deleting the plugin removes its options.
 
 == Changelog ==
+
+= 1.2.0 =
+* Results map: each step in a row can be set to "Any", so one row covers every answer to that step. An exact row wins, then the row with the fewest "Any" steps, then the row higher in the list; the fallback comes last. Rows can be removed, and "Generate / refresh combinations" keeps rows that use "Any". Existing maps work as before.
+* The result card shows WooCommerce's add-to-cart button next to "View product" for a simple product in stock, using AJAX add-to-cart where it is enabled. Variable and other product types keep the link only.
 
 = 1.1.5 =
 * The settings screen showed the shortcode as [finder], which prints as plain text. It now shows [elektilo].

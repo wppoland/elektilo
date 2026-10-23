@@ -96,6 +96,11 @@ final class Settings implements HasHooks
                 'coverageDone'    => __('All combinations have a product. ✓', 'elektilo'),
                 'coverageMissing' => __('{count} combination(s) still need a product.', 'elektilo'),
                 'needSteps'       => __('Define at least one step with options first.', 'elektilo'),
+                'any'             => __('Any', 'elektilo'),
+                'anyToken'        => \WPPoland\StorefrontKit\Finder\ProductFinderEngine::ANY,
+                /* translators: {step}: step number. */
+                'answerTo'        => __('Answer to step {step}', 'elektilo'),
+                'removeRow'       => __('Remove row', 'elektilo'),
             ],
         ]);
     }
@@ -240,13 +245,13 @@ final class Settings implements HasHooks
                 <div class="finder-card">
                     <h2>
                         <?php esc_html_e('Results map', 'elektilo'); ?>
-                        <?php $this->helpTip(__('One row per answer combination. Click “Generate / refresh combinations” to build the list from your steps, then pick the product each combination should recommend. Existing picks are kept.', 'elektilo')); ?>
+                        <?php $this->helpTip(__('One row per answer combination. Click “Generate / refresh combinations” to build the list from your steps, then pick the product each combination should recommend. Existing picks are kept. Set a step to "Any" to cover every answer to it with one row: an exact row wins, then the row with the fewest "Any" steps. Rows without a product are ignored.', 'elektilo')); ?>
                     </h2>
                     <p class="finder-callout" data-finder-coverage aria-live="polite"></p>
 
                     <div class="finder-results" data-finder-results>
                         <?php foreach (array_values($results) as $i => $row) : ?>
-                            <?php $this->renderResultRow((int) $i, is_array($row) ? $row : []); ?>
+                            <?php $this->renderResultRow((int) $i, is_array($row) ? $row : [], $steps); ?>
                         <?php endforeach; ?>
                     </div>
 
@@ -337,21 +342,42 @@ final class Settings implements HasHooks
     }
 
     /**
-     * Render one results-map row.
+     * Render one results-map row: one select per step (its options plus "Any").
      *
      * @param array<string, mixed> $row
+     * @param array<mixed>         $steps
      */
-    private function renderResultRow(int $index, array $row): void
+    private function renderResultRow(int $index, array $row, array $steps): void
     {
         $base  = self::OPTION . '[results][' . $index . ']';
-        $match = is_array($row['match'] ?? null) ? array_values($row['match']) : [];
+        $match = is_array($row['match'] ?? null) ? array_values(array_map('strval', $row['match'])) : [];
+        $steps = array_values($steps);
+        $any   = \WPPoland\StorefrontKit\Finder\ProductFinderEngine::ANY;
         ?>
-        <div class="finder-result-row" data-finder-result-row data-finder-match="<?php echo esc_attr(implode('|', array_map('strval', $match))); ?>">
+        <div class="finder-result-row" data-finder-result-row>
             <div class="finder-result-row__combo">
-                <?php foreach ($match as $value) : ?>
-                    <span class="finder-chip"><?php echo esc_html((string) $value); ?></span>
-                    <input type="hidden" name="<?php echo esc_attr($base); ?>[match][]" value="<?php echo esc_attr((string) $value); ?>" />
+                <?php foreach ($match as $pos => $value) : ?>
+                    <?php
+                    $finder_values = [];
+                    $finder_step   = is_array($steps[$pos] ?? null) ? $steps[$pos] : [];
+                    foreach ((array) ($finder_step['options'] ?? []) as $finder_option) {
+                        if (is_array($finder_option) && isset($finder_option['value'])) {
+                            $finder_values[] = (string) $finder_option['value'];
+                        }
+                    }
+                    // A value no longer offered by the step stays selectable, so saving never drops it.
+                    if ($value !== $any && ! in_array($value, $finder_values, true)) {
+                        $finder_values[] = $value;
+                    }
+                    ?>
+                    <select class="finder-match-select" data-finder-match-select name="<?php echo esc_attr($base); ?>[match][]" aria-label="<?php echo esc_attr(str_replace('{step}', (string) ($pos + 1), __('Answer to step {step}', 'elektilo'))); ?>">
+                        <option value="<?php echo esc_attr($any); ?>" <?php selected($value, $any); ?>><?php esc_html_e('Any', 'elektilo'); ?></option>
+                        <?php foreach ($finder_values as $finder_value) : ?>
+                            <option value="<?php echo esc_attr($finder_value); ?>" <?php selected($value, $finder_value); ?>><?php echo esc_html($finder_value); ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 <?php endforeach; ?>
+                <button type="button" class="button-link finder-result-row__remove" data-finder-remove-result aria-label="<?php esc_attr_e('Remove row', 'elektilo'); ?>">&times;</button>
             </div>
             <div class="finder-result-row__fields">
                 <?php $this->renderProductSelect($base . '[product_id]', '', (int) ($row['product_id'] ?? 0)); ?>
@@ -521,7 +547,10 @@ final class Settings implements HasHooks
 
             if (is_array($row['match'] ?? null)) {
                 foreach ($row['match'] as $value) {
-                    $slug = self::optionSlug((string) $value);
+                    // The "any answer" wildcard is not a slug; keep it as is.
+                    $slug = (string) $value === \WPPoland\StorefrontKit\Finder\ProductFinderEngine::ANY
+                        ? \WPPoland\StorefrontKit\Finder\ProductFinderEngine::ANY
+                        : self::optionSlug((string) $value);
 
                     if ($slug !== '') {
                         $match[] = $slug;

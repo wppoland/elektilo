@@ -25,6 +25,12 @@ namespace WPPoland\StorefrontKit\Finder;
 final class ProductFinderEngine
 {
     /**
+     * Results-map value meaning "any answer" for that step. Answers and option
+     * values are slugs ([a-z0-9_-]), so this can never be a real answer.
+     */
+    public const ANY = '*';
+
+    /**
      * @param array<string, string> $labels Fallback strings keyed by
      *        `no_match`, `not_available`, `error`.
      * @param \Closure(): bool $isEnabled
@@ -196,8 +202,12 @@ final class ProductFinderEngine
     }
 
     /**
-     * Find the results row whose ordered `match` values equal the given answers.
-     * Falls back to the configured `fallback` row when nothing matches.
+     * Find the results row for the given answers, else the `fallback` row.
+     *
+     * A row's `match` holds one value per step; {@see self::ANY} in a position
+     * matches any answer there. Only rows with a product are candidates. An
+     * exact row wins, then the row with the fewest wildcards, then the earliest
+     * row. A row without a product behaves as before: the fallback is shown.
      *
      * @param list<string>         $answers
      * @param array<string, mixed> $settings
@@ -206,24 +216,45 @@ final class ProductFinderEngine
      */
     public function matchResult(array $answers, array $settings): array
     {
-        $results = isset($settings['results']) && is_array($settings['results']) ? $settings['results'] : [];
-        $needle  = implode('|', $answers);
+        $results  = isset($settings['results']) && is_array($settings['results']) ? $settings['results'] : [];
+        $fallback = isset($settings['fallback']) && is_array($settings['fallback']) ? $settings['fallback'] : [];
+
+        if ($answers === []) {
+            return $fallback;
+        }
+
+        $best    = null;
+        $bestAny = PHP_INT_MAX;
 
         foreach ($results as $row) {
-            if (! is_array($row)) {
+            if (! is_array($row) || (int) ($row['product_id'] ?? 0) <= 0) {
                 continue;
             }
 
-            $match = isset($row['match']) && is_array($row['match']) ? array_values($row['match']) : [];
+            $match = isset($row['match']) && is_array($row['match']) ? array_values(array_map('strval', $row['match'])) : [];
 
-            if (implode('|', array_map('strval', $match)) === $needle && $needle !== '') {
-                return $row;
+            if (count($match) !== count($answers)) {
+                continue;
+            }
+
+            $any = 0;
+
+            foreach ($match as $i => $value) {
+                if ($value === self::ANY) {
+                    $any++;
+                } elseif ($value !== $answers[$i]) {
+                    continue 2;
+                }
+            }
+
+            // Strictly fewer wildcards replaces, so a tie keeps the earlier row.
+            if ($any < $bestAny) {
+                $best    = $row;
+                $bestAny = $any;
             }
         }
 
-        $fallback = isset($settings['fallback']) && is_array($settings['fallback']) ? $settings['fallback'] : [];
-
-        return $fallback;
+        return $best ?? $fallback;
     }
 
     /**
