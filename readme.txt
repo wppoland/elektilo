@@ -8,7 +8,7 @@ Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-A step-by-step product finder quiz for WooCommerce: guided single-choice questions lead each shopper to one product recommendation. No jQuery.
+Help undecided shoppers choose: a few quick questions lead each one to the one product that fits their answers.
 
 == Description ==
 
@@ -92,6 +92,8 @@ Yes. Network activate it or activate it on individual sites; each site keeps its
 1. The step-by-step Elektilo quiz on the storefront.
 2. The recommendation card with the product and a call to action.
 3. The Elektilo settings screen: steps builder and results map.
+4. A simple product on the result card gets an Add to cart button next to the product link.
+5. The results map: a step set to "Any" lets one row cover every answer to it.
 
 == External Services ==
 
