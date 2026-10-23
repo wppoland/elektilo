@@ -87,12 +87,18 @@ final class FinderService implements HasHooks
      * recommended (missing, not purchasable or out of stock). Read live so
      * price and stock are always current.
      *
-     * Variable products are recommended like any other. The card is a link: it
-     * shows the title, image, price and a link to the product page, with no
-     * add-to-cart and no variation to choose, so a variable parent renders
-     * correctly with its price range. The admin dropdown has always offered
-     * them, so refusing them here left a merchant able to pick a product the
-     * storefront would then decline.
+     * Variable products are recommended like any other. Their card stays a
+     * link to the product page: there is no variation to choose on the card,
+     * so a variable parent renders correctly with its price range. The admin
+     * dropdown has always offered them, so refusing them here left a merchant
+     * able to pick a product the storefront would then decline.
+     *
+     * A simple product (purchasable and in stock, as checked below) has
+     * nothing to choose, so its card also gets WooCommerce's own add-to-cart
+     * button. The URL is built from the permalink, not add_to_cart_url(): the
+     * card renders inside the REST request, and add_to_cart_url() appends the
+     * parameter to the current request URI, which would send a shopper without
+     * AJAX add-to-cart to the JSON endpoint.
      *
      * @return array<string, mixed>|null
      */
@@ -111,6 +117,13 @@ final class FinderService implements HasHooks
             'image_id'   => (int) $product->get_image_id(),
             'price_html' => (string) $product->get_price_html(),
             'show_price' => (bool) ($this->settings()['show_price'] ?? true),
+            'cart'       => $product->is_type('simple') ? [
+                'url'   => add_query_arg('add-to-cart', $product->get_id(), (string) $product->get_permalink()),
+                'text'  => $product->add_to_cart_text(),
+                'label' => $product->add_to_cart_description(),
+                'sku'   => $product->get_sku(),
+                'ajax'  => $product->supports('ajax_add_to_cart'),
+            ] : null,
         ];
     }
 

@@ -10,7 +10,7 @@
  *
  * @package Finder
  *
- * @var array<string, mixed>  $product      id, title, url, image_id, price_html, show_price.
+ * @var array<string, mixed>  $product      id, title, url, image_id, price_html, show_price, cart (simple products only).
  * @var string                $headline     Optional result headline.
  * @var string                $blurb        Optional result copy.
  * @var string                $cta_label    Button label (falls back to a default).
@@ -26,6 +26,7 @@ defined('ABSPATH') || exit;
 $finder_image_id = (int) ($product['image_id'] ?? 0);
 $finder_cta      = $cta_label !== '' ? $cta_label : __('View product', 'elektilo');
 $finder_target   = ! empty($new_tab) ? ' target="_blank" rel="noopener noreferrer"' : '';
+$finder_cart     = is_array($product['cart'] ?? null) ? $product['cart'] : null;
 ?>
 <div class="plogins-finder-card" style="--finder-accent: <?php echo esc_attr($accent_color); ?>;">
 	<p class="plogins-finder-card__eyebrow">
@@ -66,9 +67,17 @@ $finder_target   = ! empty($new_tab) ? ' target="_blank" rel="noopener noreferre
 		<p class="plogins-finder-card__blurb"><?php echo esc_html($blurb); ?></p>
 	<?php endif; ?>
 
-	<a class="plogins-finder-card__cta" href="<?php echo esc_url((string) $product['url']); ?>"<?php echo $finder_target; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed internal attribute string. ?>>
-		<?php echo esc_html($finder_cta); ?>
-	</a>
+	<div class="plogins-finder-card__actions">
+		<?php if ($finder_cart !== null) : ?>
+			<?php // WooCommerce's own classes and data attributes, so its AJAX add-to-cart handles the click where enabled. ?>
+			<a class="plogins-finder-card__cart button product_type_simple add_to_cart_button<?php echo ! empty($finder_cart['ajax']) ? ' ajax_add_to_cart' : ''; ?>" href="<?php echo esc_url((string) $finder_cart['url']); ?>" data-quantity="1" data-product_id="<?php echo esc_attr((string) $product['id']); ?>" data-product_sku="<?php echo esc_attr((string) $finder_cart['sku']); ?>" aria-label="<?php echo esc_attr((string) $finder_cart['label']); ?>" rel="nofollow">
+				<?php echo esc_html((string) $finder_cart['text']); ?>
+			</a>
+		<?php endif; ?>
+		<a class="plogins-finder-card__cta" href="<?php echo esc_url((string) $product['url']); ?>"<?php echo $finder_target; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed internal attribute string. ?>>
+			<?php echo esc_html($finder_cta); ?>
+		</a>
+	</div>
 </div>
 <?php
 // phpcs:enable WordPress.WP.GlobalVariablesOverride.Prohibited

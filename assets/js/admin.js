@@ -12,6 +12,7 @@
 	var CFG = window.ploginsFinderAdmin || {};
 	var OPTION = CFG.option || 'finder_settings';
 	var I18N = CFG.i18n || {};
+	var ANY = typeof I18N.anyToken === 'string' ? I18N.anyToken : '*';
 
 	function t(key, fallback) {
 		return typeof I18N[key] === 'string' ? I18N[key] : fallback;
@@ -162,16 +163,37 @@
 		return select;
 	}
 
-	function buildResultRow(index, match, existing) {
+	/** One select per step: "Any" plus that step's values (a stale saved value stays listed). */
+	function buildMatchSelect(name, pos, values, selected) {
+		var select = el('select', {
+			'class': 'finder-match-select', 'data-finder-match-select': '', name: name,
+			'aria-label': t('answerTo', 'Answer to step {step}').replace('{step}', pos + 1)
+		});
+		var list = values.slice();
+		if (selected !== ANY && list.indexOf(selected) === -1) {
+			list.push(selected);
+		}
+		[ANY].concat(list).forEach(function (v) {
+			var opt = el('option', { value: v }, v === ANY ? t('any', 'Any') : v);
+			opt.selected = v === selected;
+			select.appendChild(opt);
+		});
+		return select;
+	}
+
+	function buildResultRow(index, match, existing, lists) {
 		existing = existing || {};
 		var base = OPTION + '[results][' + index + ']';
-		var row = el('div', { 'class': 'finder-result-row', 'data-finder-result-row': '', 'data-finder-match': match.join('|') });
+		var row = el('div', { 'class': 'finder-result-row', 'data-finder-result-row': '' });
 
 		var combo = el('div', { 'class': 'finder-result-row__combo' });
-		match.forEach(function (v) {
-			combo.appendChild(el('span', { 'class': 'finder-chip' }, v));
-			combo.appendChild(el('input', { type: 'hidden', name: base + '[match][]', value: v }));
+		match.forEach(function (v, pos) {
+			combo.appendChild(buildMatchSelect(base + '[match][]', pos, lists[pos] || [], v));
 		});
+		combo.appendChild(el('button', {
+			type: 'button', 'class': 'button-link finder-result-row__remove',
+			'data-finder-remove-result': '', 'aria-label': t('removeRow', 'Remove row')
+		}, '×'));
 		row.appendChild(combo);
 
 		var fields = el('div', { 'class': 'finder-result-row__fields' });
@@ -215,11 +237,22 @@
 		return lists;
 	}
 
+	function matchKey(row) {
+		return Array.prototype.map.call(row.querySelectorAll('[data-finder-match-select]'), function (s) {
+			return s.value;
+		}).join('|');
+	}
+
+	/** Does a wildcard-or-exact match array cover this exact answer path? */
+	function covers(match, combo) {
+		return match.length === combo.length && match.every(function (v, i) { return v === ANY || v === combo[i]; });
+	}
+
 	function readExistingResults(resultsContainer) {
 		var map = {};
 		resultsContainer.querySelectorAll('[data-finder-result-row]').forEach(function (row) {
-			var key = row.getAttribute('data-finder-match') || '';
-			var select = row.querySelector('select');
+			var key = matchKey(row);
+			var select = row.querySelector('.finder-product-select');
 			var texts = row.querySelectorAll('.finder-result-row__fields input[type="text"]');
 			map[key] = {
 				product_id: select ? select.value : 0,
@@ -237,13 +270,17 @@
 			return;
 		}
 		var rows = resultsContainer.querySelectorAll('[data-finder-result-row]');
-		var missing = 0;
+		var filled = [];
+		var empty = [];
 		rows.forEach(function (row) {
-			var select = row.querySelector('select');
-			if (!select || select.value === '0' || select.value === '') {
-				missing++;
-			}
+			var select = row.querySelector('.finder-product-select');
+			var match = matchKey(row).split('|');
+			(!select || select.value === '0' || select.value === '' ? empty : filled).push(match);
 		});
+		// An empty exact row is covered when a row with a product and "Any" steps matches it.
+		var missing = empty.filter(function (match) {
+			return match.indexOf(ANY) !== -1 || !filled.some(function (f) { return covers(f, match); });
+		}).length;
 		callout.classList.remove('finder-callout--ok', 'finder-callout--warn');
 		if (!rows.length) {
 			callout.textContent = '';
@@ -267,8 +304,17 @@
 		var existing = readExistingResults(resultsContainer);
 		var combos = cartesian(lists);
 		resultsContainer.textContent = '';
+		var keys = combos.map(function (combo) { return combo.join('|'); });
+		// Rows with "Any" are not in the cartesian product; keep them after the exact rows.
+		Object.keys(existing).forEach(function (key) {
+			var match = key.split('|');
+			if (match.indexOf(ANY) !== -1 && match.length === lists.length && keys.indexOf(key) === -1) {
+				combos.push(match);
+				keys.push(key);
+			}
+		});
 		combos.forEach(function (combo, i) {
-			resultsContainer.appendChild(buildResultRow(i, combo, existing[combo.join('|')]));
+			resultsContainer.appendChild(buildResultRow(i, combo, existing[keys[i]], lists));
 		});
 		if (window.jQuery) {
 			window.jQuery(document.body).trigger('wc-enhanced-select-init');
@@ -324,6 +370,13 @@
 					generate(stepsContainer, resultsContainer, callout);
 				});
 			}
+			resultsContainer.addEventListener('click', function (event) {
+				var remove = event.target.closest('[data-finder-remove-result]');
+				if (remove) {
+					remove.closest('[data-finder-result-row]').remove();
+					updateCoverage(resultsContainer, callout);
+				}
+			});
 			// selectWoo reports changes through jQuery, which native listeners never see.
 			var onChange = function () { updateCoverage(resultsContainer, callout); };
 			resultsContainer.addEventListener('change', onChange);

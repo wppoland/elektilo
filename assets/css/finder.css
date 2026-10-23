@@ -298,6 +298,38 @@
 	color: #4b5563;
 }
 
+.plogins-finder-card__actions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.6rem;
+}
+
+/* Theme button styles vary; pin the shape so both actions match. */
+.plogins-finder-card .plogins-finder-card__cart {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-block-size: 3rem;
+	margin: 0;
+	padding: 0.7em 1.8em;
+	background: transparent;
+	color: inherit;
+	border: 2px solid var(--finder-accent);
+	font-weight: 700;
+	text-decoration: none;
+	border-radius: 10px;
+}
+
+.plogins-finder-card .plogins-finder-card__cart:focus-visible {
+	outline: 2px solid var(--finder-accent);
+	outline-offset: 3px;
+}
+
+.plogins-finder-card .added_to_cart {
+	flex-basis: 100%;
+}
+
 .plogins-finder-card__cta {
 	display: inline-flex;
 	align-items: center;
