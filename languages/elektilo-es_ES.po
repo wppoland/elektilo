@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Plogins Finder - Product Finder Quiz for WooCommerce "
 "1.0.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/elektilo\n"
-"POT-Creation-Date: 2026-09-23T08:47:35+00:00\n"
+"POT-Creation-Date: 2026-10-23T11:54:57+00:00\n"
 "PO-Revision-Date: 2026-09-23 10:00+0000\n"
 "Last-Translator: motylanogha <szatkowski.mariusz@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -54,15 +54,15 @@ msgstr "Elektilo requiere que WooCommerce esté instalado y activado."
 msgid "Settings"
 msgstr "Ajustes"
 
-#: src/Admin/Settings.php:82 src/Admin/Settings.php:379
+#: src/Admin/Settings.php:82 src/Admin/Settings.php:405
 msgid "- Select a product -"
 msgstr "- Selecciona un producto -"
 
-#: src/Admin/Settings.php:83 src/Admin/Settings.php:236
+#: src/Admin/Settings.php:83 src/Admin/Settings.php:241
 msgid "Add step"
 msgstr "Añadir paso"
 
-#: src/Admin/Settings.php:84 src/Admin/Settings.php:319
+#: src/Admin/Settings.php:84 src/Admin/Settings.php:324
 msgid "Add option"
 msgstr "Añadir opción"
 
@@ -70,46 +70,46 @@ msgstr "Añadir opción"
 msgid "Remove"
 msgstr "Quitar"
 
-#: src/Admin/Settings.php:86 src/Admin/Settings.php:304
+#: src/Admin/Settings.php:86 src/Admin/Settings.php:309
 msgid "Remove step"
 msgstr "Quitar paso"
 
-#: src/Admin/Settings.php:87 src/Admin/Settings.php:307
-#: src/Admin/Settings.php:308
+#: src/Admin/Settings.php:87 src/Admin/Settings.php:312
+#: src/Admin/Settings.php:313
 msgid "Question"
 msgstr "Pregunta"
 
-#: src/Admin/Settings.php:88 src/Admin/Settings.php:311
-#: src/Admin/Settings.php:312
+#: src/Admin/Settings.php:88 src/Admin/Settings.php:316
+#: src/Admin/Settings.php:317
 msgid "Hint (optional)"
 msgstr "Pista (opcional)"
 
-#: src/Admin/Settings.php:89 src/Admin/Settings.php:332
+#: src/Admin/Settings.php:89 src/Admin/Settings.php:337
 msgid "Option label"
 msgstr "Etiqueta de la opción"
 
-#: src/Admin/Settings.php:90 src/Admin/Settings.php:333
+#: src/Admin/Settings.php:90 src/Admin/Settings.php:338
 msgid "Value (slug)"
 msgstr "Valor (slug)"
 
-#: src/Admin/Settings.php:91 src/Admin/Settings.php:254
+#: src/Admin/Settings.php:91 src/Admin/Settings.php:259
 msgid "Generate / refresh combinations"
 msgstr "Generar / actualizar combinaciones"
 
-#: src/Admin/Settings.php:92 src/Admin/Settings.php:266
-#: src/Admin/Settings.php:377
+#: src/Admin/Settings.php:92 src/Admin/Settings.php:271
+#: src/Admin/Settings.php:404
 msgid "Recommended product"
 msgstr "Producto recomendado"
 
-#: src/Admin/Settings.php:93 src/Admin/Settings.php:358
+#: src/Admin/Settings.php:93 src/Admin/Settings.php:384
 msgid "Headline (optional)"
 msgstr "Titular (opcional)"
 
-#: src/Admin/Settings.php:94 src/Admin/Settings.php:359
+#: src/Admin/Settings.php:94 src/Admin/Settings.php:385
 msgid "Description (optional)"
 msgstr "Descripción (opcional)"
 
-#: src/Admin/Settings.php:95 src/Admin/Settings.php:360
+#: src/Admin/Settings.php:95 src/Admin/Settings.php:386
 msgid "Button label (optional)"
 msgstr "Etiqueta del botón (opcional)"
 
@@ -125,23 +125,36 @@ msgstr "{count} combinación(es) todavía necesitan un producto."
 msgid "Define at least one step with options first."
 msgstr "Primero define al menos un paso con opciones."
 
-#: src/Admin/Settings.php:106
+#: src/Admin/Settings.php:99 src/Admin/Settings.php:374
+msgid "Any"
+msgstr ""
+
+#. translators: {step}: step number.
+#: src/Admin/Settings.php:102 src/Admin/Settings.php:373
+msgid "Answer to step {step}"
+msgstr ""
+
+#: src/Admin/Settings.php:103 src/Admin/Settings.php:380
+msgid "Remove row"
+msgstr ""
+
+#: src/Admin/Settings.php:111
 msgid "Elektilo: product finder quiz"
 msgstr "Elektilo: cuestionario buscador de productos"
 
-#: src/Admin/Settings.php:107
+#: src/Admin/Settings.php:112
 msgid "Elektilo"
 msgstr "Elektilo"
 
-#: src/Admin/Settings.php:145
+#: src/Admin/Settings.php:150
 msgid "Live"
 msgstr "Activo"
 
-#: src/Admin/Settings.php:147
+#: src/Admin/Settings.php:152
 msgid "Off"
 msgstr "Desactivado"
 
-#: src/Admin/Settings.php:152
+#: src/Admin/Settings.php:157
 msgid ""
 "Build a friendly step-by-step quiz that guides shoppers to one product. Add "
 "it to any page with the shortcode below, define your questions, then map "
@@ -151,19 +164,19 @@ msgstr ""
 "único producto. Añádelo a cualquier página con el shortcode de abajo, define "
 "tus preguntas y luego asigna un producto a cada combinación de respuestas."
 
-#: src/Admin/Settings.php:156
+#: src/Admin/Settings.php:161
 msgid "Shortcode:"
 msgstr "Shortcode:"
 
-#: src/Admin/Settings.php:164
+#: src/Admin/Settings.php:169
 msgid "Basics"
 msgstr "Aspectos básicos"
 
-#: src/Admin/Settings.php:169
+#: src/Admin/Settings.php:174
 msgid "Enable finder"
 msgstr "Activar Finder"
 
-#: src/Admin/Settings.php:170
+#: src/Admin/Settings.php:175
 msgid ""
 "The master switch. Keep it off until every combination below has a product "
 "mapped, then turn it on so the quiz appears wherever you placed the "
@@ -173,32 +186,32 @@ msgstr ""
 "abajo tenga un producto asignado; luego actívalo para que el cuestionario "
 "aparezca allí donde hayas colocado el shortcode."
 
-#: src/Admin/Settings.php:175
+#: src/Admin/Settings.php:180
 msgid "Show the finder quiz on the storefront."
 msgstr "Mostrar el cuestionario de Finder en la tienda."
 
-#: src/Admin/Settings.php:180
+#: src/Admin/Settings.php:185
 msgid "Heading"
 msgstr "Encabezado"
 
-#: src/Admin/Settings.php:182
+#: src/Admin/Settings.php:187
 msgid "Find your perfect match in 30 seconds"
 msgstr "Encuentra tu producto ideal en 30 segundos"
 
-#: src/Admin/Settings.php:186
+#: src/Admin/Settings.php:191
 msgid "Sub-heading"
 msgstr "Subtítulo"
 
-#: src/Admin/Settings.php:188
+#: src/Admin/Settings.php:193
 msgid "Answer a couple of questions and we’ll recommend the right product."
 msgstr ""
 "Responde a un par de preguntas y te recomendaremos el producto adecuado."
 
-#: src/Admin/Settings.php:193
+#: src/Admin/Settings.php:198
 msgid "Accent colour"
 msgstr "Color de acento"
 
-#: src/Admin/Settings.php:194
+#: src/Admin/Settings.php:199
 msgid ""
 "Used for the progress bar, the selected option and the main button. Pick a "
 "colour that matches your brand."
@@ -206,27 +219,27 @@ msgstr ""
 "Se usa para la barra de progreso, la opción seleccionada y el botón "
 "principal. Elige un color que combine con tu marca."
 
-#: src/Admin/Settings.php:201
+#: src/Admin/Settings.php:206
 msgid "Show price"
 msgstr "Mostrar el precio"
 
-#: src/Admin/Settings.php:205
+#: src/Admin/Settings.php:210
 msgid "Show the product price on the recommendation card."
 msgstr "Mostrar el precio del producto en la tarjeta de recomendación."
 
-#: src/Admin/Settings.php:210
+#: src/Admin/Settings.php:215
 msgid "Open in new tab"
 msgstr "Abrir en nueva pestaña"
 
-#: src/Admin/Settings.php:214
+#: src/Admin/Settings.php:219
 msgid "Open the recommended product in a new browser tab."
 msgstr "Abra el producto recomendado en una nueva pestaña del navegador."
 
-#: src/Admin/Settings.php:224
+#: src/Admin/Settings.php:229
 msgid "Steps"
 msgstr "Pasos"
 
-#: src/Admin/Settings.php:225
+#: src/Admin/Settings.php:230
 msgid ""
 "Each step is one question with single-choice options. The option “value” is "
 "a short slug used to identify the answer, keep it lowercase and unique "
@@ -236,31 +249,29 @@ msgstr ""
 "opción es un slug corto que identifica la respuesta: escríbelo en minúsculas "
 "y que sea único dentro de un paso (por ejemplo, casa, gimnasio)."
 
-#: src/Admin/Settings.php:227
+#: src/Admin/Settings.php:232
 msgid "Add your questions and answers. Two or three short steps convert best."
 msgstr ""
 "Añade tus preguntas y respuestas. Dos o tres pasos cortos convierten mejor."
 
-#: src/Admin/Settings.php:242
+#: src/Admin/Settings.php:247
 msgid "Results map"
 msgstr "Mapa de resultados"
 
-#: src/Admin/Settings.php:243
+#: src/Admin/Settings.php:248
 msgid ""
 "One row per answer combination. Click “Generate / refresh combinations” to "
 "build the list from your steps, then pick the product each combination "
-"should recommend. Existing picks are kept."
+"should recommend. Existing picks are kept. Set a step to \"Any\" to cover "
+"every answer to it with one row: an exact row wins, then the row with the "
+"fewest \"Any\" steps. Rows without a product are ignored."
 msgstr ""
-"Una fila por cada combinación de respuestas. Haz clic en «Generar / "
-"actualizar combinaciones» para crear la lista a partir de tus pasos y luego "
-"elige el producto que debe recomendar cada combinación. Las selecciones "
-"existentes se conservan."
 
-#: src/Admin/Settings.php:260
+#: src/Admin/Settings.php:265
 msgid "Fallback"
 msgstr "Alternativa"
 
-#: src/Admin/Settings.php:261
+#: src/Admin/Settings.php:266
 msgid ""
 "Shown when no combination matches, or when a mapped product is unavailable. "
 "A safe, popular product is a good choice."
@@ -268,27 +279,27 @@ msgstr ""
 "Se muestra cuando ninguna combinación coincide o cuando un producto asignado "
 "no está disponible. Un producto seguro y popular es una buena opción."
 
-#: src/Admin/Settings.php:270
+#: src/Admin/Settings.php:275
 msgid "Headline"
 msgstr "Titular"
 
-#: src/Admin/Settings.php:274
+#: src/Admin/Settings.php:279
 msgid "Description"
 msgstr "Descripción"
 
-#: src/Admin/Settings.php:278
+#: src/Admin/Settings.php:283
 msgid "Button label"
 msgstr "Etiqueta del botón"
 
-#: src/Admin/Settings.php:279 templates/result-card.php:27
+#: src/Admin/Settings.php:284 templates/result-card.php:27
 msgid "View product"
 msgstr "Ver producto"
 
-#: src/Admin/Settings.php:333
+#: src/Admin/Settings.php:338
 msgid "value"
 msgstr "valor"
 
-#: src/Admin/Settings.php:334
+#: src/Admin/Settings.php:339
 msgid "Remove option"
 msgstr "Quitar opción"
 
@@ -339,6 +350,16 @@ msgstr "Progreso del cuestionario"
 #: templates/finder.php:111
 msgid "Please enable JavaScript to use the product finder."
 msgstr "Activa JavaScript para usar el buscador de productos."
+
+#~ msgid ""
+#~ "One row per answer combination. Click “Generate / refresh combinations” "
+#~ "to build the list from your steps, then pick the product each combination "
+#~ "should recommend. Existing picks are kept."
+#~ msgstr ""
+#~ "Una fila por cada combinación de respuestas. Haz clic en «Generar / "
+#~ "actualizar combinaciones» para crear la lista a partir de tus pasos y "
+#~ "luego elige el producto que debe recomendar cada combinación. Las "
+#~ "selecciones existentes se conservan."
 
 #~ msgid "Plogins Finder - Product Finder Quiz for WooCommerce"
 #~ msgstr "Plogins Finder: cuestionario buscador de productos para WooCommerce"
