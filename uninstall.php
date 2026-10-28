@@ -38,3 +38,6 @@ if (is_multisite()) {
 } else {
     finder_uninstall_cleanup();
 }
+
+// User meta is network-wide, so it is removed once, outside the per-site loop.
+delete_metadata('user', 0, 'finder_pro_banner_dismissed', '', true);

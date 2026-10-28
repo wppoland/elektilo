@@ -26,8 +26,16 @@ final class Settings implements HasHooks
     /** Monotonic counter so each help tooltip gets a unique DOM id. */
     private int $tipSeq = 0;
 
+    private ?ProUpsell $proUpsell = null;
+
+    private function proUpsell(): ProUpsell
+    {
+        return $this->proUpsell ??= new ProUpsell();
+    }
+
     public function registerHooks(): void
     {
+        $this->proUpsell()->registerHooks();
         add_action('admin_menu', [$this, 'addMenuPage']);
         add_action('admin_init', [$this, 'registerSettings']);
         add_action('admin_enqueue_scripts', [$this, 'enqueueAssets']);
@@ -152,6 +160,8 @@ final class Settings implements HasHooks
                     <span class="finder-status finder-status--off"><span class="finder-status__dot" aria-hidden="true"></span><?php esc_html_e('Off', 'elektilo'); ?></span>
                 <?php endif; ?>
             </h1>
+
+            <?php $this->proUpsell()->banner(); ?>
 
             <p class="finder-admin__intro">
                 <?php esc_html_e('Build a friendly step-by-step quiz that guides shoppers to one product. Add it to any page with the shortcode below, define your questions, then map every answer combination to a product.', 'elektilo'); ?>
@@ -289,6 +299,8 @@ final class Settings implements HasHooks
 
                 <?php submit_button(); ?>
             </form>
+
+            <?php $this->proUpsell()->cards(); ?>
         </div>
         <?php
     }
