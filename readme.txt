@@ -4,7 +4,7 @@ Tags: woocommerce, product finder, product quiz, product recommendation, guided 
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,7 @@ You define the questions and options, then map every answer combination to a pro
 * **Plugin page**: [plogins.com/plogins-finder/](https://plogins.com/plogins-finder/)
 * **Source code**: [github.com/wppoland/plogins-finder](https://github.com/wppoland/plogins-finder)
 * **Bug reports and feature requests**: [github.com/wppoland/plogins-finder/issues](https://github.com/wppoland/plogins-finder/issues)
+* **Elektilo Pro**: [plogins.com/plogins-finder-pro/](https://plogins.com/plogins-finder-pro/)
 
 = Built for speed and accessibility =
 
@@ -49,6 +50,35 @@ All strings are translatable through the `elektilo` text domain, and a `elektilo
 = How it works =
 
 The quiz is rendered server-side (so it can be cached with the page) and advanced entirely client-side, no round-trip between steps. Only the final recommendation is fetched, from a same-origin REST request to your own site, and rendered fresh so price and stock are current. The CSS and JavaScript are enqueued only on pages that contain the `[elektilo]` shortcode.
+
+== Elektilo Pro ==
+
+Elektilo Pro is a separate paid plugin that extends Elektilo.
+
+Included in Elektilo:
+
+* A step-by-step quiz
+* One recommendation at the end
+* The combination map
+* A missing-rows counter
+* A fallback product
+
+Elektilo Pro adds:
+
+* Multiple quizzes
+* Multiple-choice questions
+* Points per answer
+* 1 to 12 products in the result
+* Email step with consent
+* Leads in your own database
+* Quiz statistics
+* Rate limits
+
+The free edition is not a trial and its features stay available without a time limit.
+
+* **Elektilo Pro** - [plogins.com/plogins-finder-pro/](https://plogins.com/plogins-finder-pro/)
+* **Compare editions and pricing** - [plogins.com/plogins-finder-pro/pricing/](https://plogins.com/plogins-finder-pro/pricing/)
+* **PRO documentation** - [plogins.com/plogins-finder-pro/docs/](https://plogins.com/plogins-finder-pro/docs/)
 
 == Installation ==
 
@@ -102,6 +132,10 @@ Elektilo does not connect to, or send any data to, any external service or third
 All data stays inside your WordPress database: the questions, options, results map and settings live in the `finder_settings` option (with `finder_db_version` tracking the schema). When a shopper finishes the quiz, their answers are sent in a same-origin REST request to your site's own `/wp-json/` endpoint, which returns the recommendation; no outbound HTTP request is ever made. The current step and answers are also kept in the page URL and the browser's per-tab session storage so the quiz is resumable. Deleting the plugin removes its options.
 
 == Changelog ==
+
+= 1.2.1 =
+* The settings screen shows what Elektilo Pro adds: a dismissible banner and a list of its features, hidden once Elektilo Pro is active. Nothing in Elektilo changes or is limited.
+* readme: an Elektilo Pro section with links to its page, pricing and documentation.
 
 = 1.2.0 =
 * Results map: each step in a row can be set to "Any", so one row covers every answer to that step. An exact row wins, then the row with the fewest "Any" steps, then the row higher in the list; the fallback comes last. Rows can be removed, and "Generate / refresh combinations" keeps rows that use "Any". Existing maps work as before.

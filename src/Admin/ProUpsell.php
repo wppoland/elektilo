@@ -1,0 +1,228 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Finder\Admin;
+
+defined('ABSPATH') || exit;
+
+/**
+ * PRO upgrade promotion, shown ONLY on the Elektilo settings screen: a dismissible
+ * top banner and a "what PRO adds" locked-card list.
+ *
+ * It is pure advertising: no disabled form fields, nothing blocks a free
+ * workflow, it is scoped to this one screen and the banner is dismissible per
+ * user. That keeps it inside the WordPress.org guidelines (no admin hijacking,
+ * no trialware). Content comes from config/pro-upsell.php, generated from the
+ * plogins.com registry, so the feature copy always matches the real PRO edition.
+ */
+final class ProUpsell
+{
+    private const META   = 'finder_pro_banner_dismissed';
+    private const ACTION = 'finder_dismiss_pro';
+
+    /** @var array<string, mixed>|null */
+    private ?array $data = null;
+
+    public function registerHooks(): void
+    {
+        add_action('admin_post_' . self::ACTION, [$this, 'handleDismiss']);
+    }
+
+    /** @return array<string, mixed> */
+    private function data(): array
+    {
+        if ($this->data === null) {
+            $file = FINDER_DIR . 'config/pro-upsell.php';
+            $this->data = is_readable($file) ? (array) require $file : [];
+        }
+        return $this->data;
+    }
+
+    /** Whether the PRO edition can actually be bought yet. */
+    private function sellable(): bool
+    {
+        return (bool) ($this->data()['sellable'] ?? false);
+    }
+
+    /** Whether to render the promo at all (filterable for white-label builds). */
+    public function enabled(): bool
+    {
+
+        // Somebody running the paid edition has already bought what this sells.
+        // Only the banner is dismissible, so without this the locked cards
+        // would follow a paying customer around for ever.
+        if (defined('Finder\\Pro\\VERSION')) {
+            return false;
+        }
+        /**
+         * Filters whether the Elektilo PRO promo is shown on the settings screen.
+         *
+         * @param bool $show Default true.
+         */
+        return (bool) apply_filters('finder/show_pro_cta', true) && $this->features() !== [];
+    }
+
+    /**
+     * The pricing page in the admin's language when plogins.com publishes one,
+     * tagged so the store can tell a visit came from this settings screen.
+     */
+    private function trackedUrl(string $url): string
+    {
+        $d    = $this->data();
+        $lang = substr((string) get_user_locale(), 0, 2);
+        if (in_array($lang, (array) ($d['locales'] ?? []), true)) {
+            $url = (string) preg_replace('#^https://plogins\.com/#', 'https://plogins.com/' . $lang . '/', $url);
+        }
+        if (empty($d['campaign'])) {
+            return $url;
+        }
+        return add_query_arg(
+            [
+                'utm_source'   => 'wp-admin',
+                'utm_medium'   => 'plugin',
+                'utm_campaign' => (string) $d['campaign'],
+            ],
+            $url
+        );
+    }
+
+    private function url(): string
+    {
+        $default = (string) ($this->data()['url'] ?? 'https://plogins.com/plogins-finder-pro/pricing/');
+        $default = $this->trackedUrl($default);
+        /**
+         * Filters the URL the PRO call-to-action buttons point at.
+         *
+         * @param string $url Default the Elektilo PRO pricing page.
+         */
+        return (string) apply_filters('finder/pro_url', $default);
+    }
+
+    private function isPolish(): bool
+    {
+        return str_starts_with((string) get_user_locale(), 'pl');
+    }
+
+    private function priceLabel(): string
+    {
+        if (! $this->sellable()) {
+            return __('Coming soon', 'elektilo');
+        }
+        $d = $this->data();
+        if (! empty($d['price_from'])) {
+            $cur = ($d['currency'] ?? 'EUR') === 'EUR' ? '€' : (string) $d['currency'] . ' ';
+            /* translators: 1: currency symbol, 2: yearly price */
+            return sprintf(__('from %1$s%2$d/yr', 'elektilo'), $cur, (int) $d['price_from']);
+        }
+        return '';
+    }
+
+    /** The call-to-action label: buy when sellable, otherwise a soft notify. */
+    private function ctaLabel(): string
+    {
+        return $this->sellable()
+            ? __('Upgrade to PRO', 'elektilo')
+            : __('Get notified', 'elektilo');
+    }
+
+    /** @return array<int, array{title: string, desc: string}> */
+    private function features(): array
+    {
+        $lang = $this->isPolish() ? 'pl' : 'en';
+        $out  = [];
+        foreach ((array) ($this->data()['features'] ?? []) as $f) {
+            $x = is_array($f) ? ($f[$lang] ?? $f['en'] ?? null) : null;
+            if (is_array($x) && ! empty($x['title'])) {
+                $out[] = ['title' => (string) $x['title'], 'desc' => (string) ($x['desc'] ?? '')];
+            }
+        }
+        return $out;
+    }
+
+    public function bannerDismissed(): bool
+    {
+        return (bool) get_user_meta(get_current_user_id(), self::META, true);
+    }
+
+    private function dismissUrl(): string
+    {
+        return wp_nonce_url(admin_url('admin-post.php?action=' . self::ACTION), self::ACTION);
+    }
+
+    public function handleDismiss(): void
+    {
+        if (! current_user_can('manage_woocommerce')) {
+            wp_die(esc_html__('Permission denied.', 'elektilo'));
+        }
+        check_admin_referer(self::ACTION);
+        update_user_meta(get_current_user_id(), self::META, 1);
+        wp_safe_redirect(wp_get_referer() ?: admin_url('admin.php?page=finder-settings'));
+        exit;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Render pieces                                                       */
+    /* ------------------------------------------------------------------ */
+
+    /** Dismissible strip at the top of the settings screen. */
+    public function banner(): void
+    {
+        if (! $this->enabled() || $this->bannerDismissed()) {
+            return;
+        }
+        $name     = (string) ($this->data()['name'] ?? 'Elektilo Pro');
+        $price    = $this->priceLabel();
+        $subtitle = implode(', ', array_slice(array_map(
+            static fn (array $f): string => $f['title'],
+            $this->features(),
+        ), 0, 3));
+        ?>
+        <div class="finder-pro-banner" role="note">
+            <span class="finder-pro-banner__tag">PRO</span>
+            <p class="finder-pro-banner__text">
+                <strong><?php
+                /* translators: %s: PRO edition name */
+                printf(esc_html__('Do more with %s', 'elektilo'), esc_html($name)); ?></strong>
+                <?php if ($subtitle !== '') : ?><span class="finder-pro-banner__sub"><?php echo esc_html($subtitle); ?></span><?php endif; ?>
+                <?php if ($price !== '') : ?><span class="finder-pro-banner__price"><?php echo esc_html($price); ?></span><?php endif; ?>
+            </p>
+            <a class="button button-primary finder-pro-banner__cta" href="<?php echo esc_url($this->url()); ?>" target="_blank" rel="noopener noreferrer">
+                <?php echo esc_html($this->ctaLabel()); ?>
+            </a>
+            <a class="finder-pro-banner__dismiss" href="<?php echo esc_url($this->dismissUrl()); ?>" aria-label="<?php esc_attr_e('Dismiss this notice', 'elektilo'); ?>">&times;</a>
+        </div>
+        <?php
+    }
+
+    /** "What PRO adds" locked-card grid, appended after the settings form. */
+    public function cards(): void
+    {
+        if (! $this->enabled()) {
+            return;
+        }
+        $features = $this->features();
+        $name     = (string) ($this->data()['name'] ?? 'Elektilo Pro');
+        ?>
+        <section class="finder-pro-cards" aria-labelledby="finder-pro-cards-h">
+            <h2 id="finder-pro-cards-h" class="finder-pro-cards__title">
+                <?php
+                /* translators: %s: PRO edition name */
+                printf(esc_html__('What %s adds', 'elektilo'), esc_html($name)); ?>
+            </h2>
+            <div class="finder-pro-cards__grid">
+                <?php foreach ($features as $f) : ?>
+                    <article class="finder-pro-card">
+                        <span class="finder-pro-card__badge">PRO</span>
+                        <span class="finder-pro-card__lock" aria-hidden="true"></span>
+                        <h3 class="finder-pro-card__title"><?php echo esc_html($f['title']); ?></h3>
+                        <?php if ($f['desc'] !== '') : ?>
+                            <p class="finder-pro-card__desc"><?php echo esc_html($f['desc']); ?></p>
+                        <?php endif; ?>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <?php
+    }
+}
