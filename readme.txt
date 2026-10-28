@@ -4,7 +4,7 @@ Tags: woocommerce, product finder, product quiz, product recommendation, guided 
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,17 +14,17 @@ Help undecided shoppers choose: a few quick questions lead each one to the one p
 
 Elektilo adds a guided "help me choose" quiz to any page with the `[elektilo]` shortcode. Shoppers answer a short series of single-choice questions and are shown one recommended product, with its image, price and a button straight to the product page. A simple product also gets WooCommerce's own add-to-cart button on the card.
 
-Elektilo is developed in the open. The code, and a place to report bugs or request features, live at [github.com/wppoland/plogins-finder](https://github.com/wppoland/plogins-finder).
+Elektilo is developed in the open. The code, and a place to report bugs or request features, live at [github.com/wppoland/elektilo](https://github.com/wppoland/elektilo).
 
 You define the questions and options, then map every answer combination to a product. A "Generate combinations" button builds the map for you from your steps, so you only pick a product for each path. Set a step to "Any" in a row and that one row covers every answer to it, so a quiz where only some answers matter needs far fewer rows.
 
 = Documentation and links =
 
-* **Documentation**: [plogins.com/plogins-finder/docs/](https://plogins.com/plogins-finder/docs/)
-* **Plugin page**: [plogins.com/plogins-finder/](https://plogins.com/plogins-finder/)
-* **Source code**: [github.com/wppoland/plogins-finder](https://github.com/wppoland/plogins-finder)
-* **Bug reports and feature requests**: [github.com/wppoland/plogins-finder/issues](https://github.com/wppoland/plogins-finder/issues)
-* **Elektilo Pro**: [plogins.com/plogins-finder-pro/](https://plogins.com/plogins-finder-pro/)
+* **Documentation**: [plogins.com/elektilo/docs/](https://plogins.com/elektilo/docs/)
+* **Plugin page**: [plogins.com/elektilo/](https://plogins.com/elektilo/)
+* **Source code**: [github.com/wppoland/elektilo](https://github.com/wppoland/elektilo)
+* **Bug reports and feature requests**: [github.com/wppoland/elektilo/issues](https://github.com/wppoland/elektilo/issues)
+* **Elektilo Pro**: [plogins.com/elektilo-pro/](https://plogins.com/elektilo-pro/)
 
 = Built for speed and accessibility =
 
@@ -76,9 +76,9 @@ Elektilo Pro adds:
 
 The free edition is not a trial and its features stay available without a time limit.
 
-* **Elektilo Pro** - [plogins.com/plogins-finder-pro/](https://plogins.com/plogins-finder-pro/)
-* **Compare editions and pricing** - [plogins.com/plogins-finder-pro/pricing/](https://plogins.com/plogins-finder-pro/pricing/)
-* **PRO documentation** - [plogins.com/plogins-finder-pro/docs/](https://plogins.com/plogins-finder-pro/docs/)
+* **Elektilo Pro** - [plogins.com/elektilo-pro/](https://plogins.com/elektilo-pro/)
+* **Compare editions and pricing** - [plogins.com/elektilo-pro/pricing/](https://plogins.com/elektilo-pro/pricing/)
+* **PRO documentation** - [plogins.com/elektilo-pro/docs/](https://plogins.com/elektilo-pro/docs/)
 
 == Installation ==
 
@@ -132,6 +132,9 @@ Elektilo does not connect to, or send any data to, any external service or third
 All data stays inside your WordPress database: the questions, options, results map and settings live in the `finder_settings` option (with `finder_db_version` tracking the schema). When a shopper finishes the quiz, their answers are sent in a same-origin REST request to your site's own `/wp-json/` endpoint, which returns the recommendation; no outbound HTTP request is ever made. The current step and answers are also kept in the page URL and the browser's per-tab session storage so the quiz is resumable. Deleting the plugin removes its options.
 
 == Changelog ==
+
+= 1.2.2 =
+* Links point at the new plogins.com address and the renamed GitHub repository.
 
 = 1.2.1 =
 * The settings screen shows what Elektilo Pro adds: a dismissible banner and a list of its features, hidden once Elektilo Pro is active. Nothing in Elektilo changes or is limited.

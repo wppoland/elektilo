@@ -22,8 +22,8 @@ msgstr "Elektilo - Cuestionario buscador de productos para WooCommerce"
 
 #. Plugin URI of the plugin
 #: elektilo.php
-msgid "https://plogins.com/plogins-finder/"
-msgstr "https://plogins.com/plogins-finder/"
+msgid "https://plogins.com/elektilo/"
+msgstr "https://plogins.com/elektilo/"
 
 #. Description of the plugin
 #: elektilo.php
@@ -401,9 +401,6 @@ msgstr "Activa JavaScript para usar el buscador de productos."
 
 #~ msgid "Plogins Finder - Product Finder Quiz for WooCommerce"
 #~ msgstr "Plogins Finder: cuestionario buscador de productos para WooCommerce"
-
-#~ msgid "https://plogins.com/elektilo/"
-#~ msgstr "https://plogins.com/es/elektilo/"
 
 #~ msgid "Finder requires WooCommerce to be active."
 #~ msgstr "Finder requiere que WooCommerce esté activo."

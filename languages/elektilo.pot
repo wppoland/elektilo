@@ -21,7 +21,7 @@ msgstr ""
 
 #. Plugin URI of the plugin
 #: elektilo.php
-msgid "https://plogins.com/plogins-finder/"
+msgid "https://plogins.com/elektilo/"
 msgstr ""
 
 #. Description of the plugin
