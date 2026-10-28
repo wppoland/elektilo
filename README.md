@@ -4,11 +4,11 @@ A friendly step-by-step product finder quiz for WooCommerce. Guided single-choic
 questions lead each shopper to one product recommendation. Accessible, no jQuery,
 zero layout shift, REST-powered live result.
 
-- **Plugin page:** https://plogins.com/plogins-finder/
-- **Documentation:** https://plogins.com/plogins-finder/docs/
+- **Plugin page:** https://plogins.com/elektilo/
+- **Documentation:** https://plogins.com/elektilo/docs/
 - **Author:** [WPPoland.com](https://wppoland.com)
 - **WordPress.org contributor:** motylanogha
-- **Source:** https://github.com/wppoland/plogins-finder
+- **Source:** https://github.com/wppoland/elektilo
 
 ## Usage
 

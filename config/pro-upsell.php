@@ -4,15 +4,15 @@
  * scripts/gen-pro-upsell.mjs. The admin upsell renders this; curate the
  * feature list to fit this plugin's settings screen (do not invent features).
  *
- * @package plogins-finder-pro
+ * @package elektilo-pro
  */
 
 defined('ABSPATH') || exit;
 
 return [
     'name'       => 'Elektilo Pro',
-    'url'        => 'https://plogins.com/plogins-finder-pro/pricing/',
-    'campaign'   => 'plogins-finder',
+    'url'        => 'https://plogins.com/elektilo-pro/pricing/',
+    'campaign'   => 'elektilo',
     'locales'    => ['pl', 'de', 'es'],
     'sellable'   => true,
     'price_from' => 29,
