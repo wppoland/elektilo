@@ -105,7 +105,7 @@ final class Settings implements HasHooks
                 'coverageMissing' => __('{count} combination(s) still need a product.', 'elektilo'),
                 'needSteps'       => __('Define at least one step with options first.', 'elektilo'),
                 'any'             => __('Any', 'elektilo'),
-                'anyToken'        => \WPPoland\StorefrontKit\Finder\ProductFinderEngine::ANY,
+                'anyToken'        => \Finder\Vendor\StorefrontKit\Finder\ProductFinderEngine::ANY,
                 /* translators: {step}: step number. */
                 'answerTo'        => __('Answer to step {step}', 'elektilo'),
                 'removeRow'       => __('Remove row', 'elektilo'),
@@ -364,7 +364,7 @@ final class Settings implements HasHooks
         $base  = self::OPTION . '[results][' . $index . ']';
         $match = is_array($row['match'] ?? null) ? array_values(array_map('strval', $row['match'])) : [];
         $steps = array_values($steps);
-        $any   = \WPPoland\StorefrontKit\Finder\ProductFinderEngine::ANY;
+        $any   = \Finder\Vendor\StorefrontKit\Finder\ProductFinderEngine::ANY;
         ?>
         <div class="finder-result-row" data-finder-result-row>
             <div class="finder-result-row__combo">
@@ -560,8 +560,8 @@ final class Settings implements HasHooks
             if (is_array($row['match'] ?? null)) {
                 foreach ($row['match'] as $value) {
                     // The "any answer" wildcard is not a slug; keep it as is.
-                    $slug = (string) $value === \WPPoland\StorefrontKit\Finder\ProductFinderEngine::ANY
-                        ? \WPPoland\StorefrontKit\Finder\ProductFinderEngine::ANY
+                    $slug = (string) $value === \Finder\Vendor\StorefrontKit\Finder\ProductFinderEngine::ANY
+                        ? \Finder\Vendor\StorefrontKit\Finder\ProductFinderEngine::ANY
                         : self::optionSlug((string) $value);
 
                     if ($slug !== '') {

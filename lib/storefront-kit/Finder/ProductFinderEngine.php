@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace WPPoland\StorefrontKit\Finder;
+namespace Finder\Vendor\StorefrontKit\Finder;
 
 /**
  * Namespace-neutral guided product-finder quiz engine.
  *
- * Mirrors {@see \WPPoland\StorefrontKit\Compare\CompareEngine}: every
+ * Mirrors {@see \Finder\Vendor\StorefrontKit\Compare\CompareEngine}: every
  * text-domain string, option key, asset handle/URL and template name is
  * constructor-injected via closures and arrays, so nothing WooCommerce-,
  * option- or text-domain-specific is hard-coded here. The engine owns the

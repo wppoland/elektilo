@@ -16,7 +16,7 @@
     "autoload": {
         "psr-4": {
             "Finder\\": "src/",
-            "WPPoland\\StorefrontKit\\": "lib/storefront-kit/"
+            "Finder\\Vendor\\StorefrontKit\\": "lib/storefront-kit/"
         }
     },
     "scripts": {

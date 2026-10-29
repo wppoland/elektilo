@@ -24,7 +24,7 @@ namespace {
     require __DIR__ . '/../lib/storefront-kit/Finder/ProductFinderEngine.php';
     require __DIR__ . '/../src/Admin/Settings.php';
 
-    use WPPoland\StorefrontKit\Finder\ProductFinderEngine;
+    use Finder\Vendor\StorefrontKit\Finder\ProductFinderEngine;
 
     ini_set('zend.assertions', '1');
     ini_set('assert.exception', '1');
