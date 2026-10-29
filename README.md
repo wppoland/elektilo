@@ -20,7 +20,7 @@ zero layout shift, REST-powered live result.
 
 ## Architecture
 
-Thin plugin wrapper over the shared `WPPoland\StorefrontKit\Finder\ProductFinderEngine`
+Thin plugin wrapper over the shared `Finder\Vendor\StorefrontKit\Finder\ProductFinderEngine`
 (vendored under `lib/storefront-kit/`). The engine owns the shortcode, the REST
 match endpoint (`/wp-json/plogins/v1/finder/match`) and asset enqueue; the plugin
 supplies text domain, the `finder_settings` option, templates and the

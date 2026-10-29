@@ -21,8 +21,8 @@ if (is_readable($finder_composer)) {
 
 spl_autoload_register(static function (string $class): void {
     $prefixes = [
+        'Finder\\Vendor\\StorefrontKit\\'    => __DIR__ . '/lib/storefront-kit/',
         'Finder\\'           => __DIR__ . '/src/',
-        'WPPoland\\StorefrontKit\\'    => __DIR__ . '/lib/storefront-kit/',
     ];
 
     foreach ($prefixes as $prefix => $baseDir) {

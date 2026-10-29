@@ -7,7 +7,7 @@ namespace Finder\Service;
 defined('ABSPATH') || exit;
 
 use Finder\Contract\HasHooks;
-use WPPoland\StorefrontKit\Finder\ProductFinderEngine;
+use Finder\Vendor\StorefrontKit\Finder\ProductFinderEngine;
 
 /**
  * Thin adapter over the storefront-kit {@see ProductFinderEngine}.
