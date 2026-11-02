@@ -1,4 +1,4 @@
-# Finder, Product Finder Quiz for WooCommerce
+# Elektilo, Product Finder Quiz for WooCommerce
 
 A friendly step-by-step product finder quiz for WooCommerce. Guided single-choice
 questions lead each shopper to one product recommendation. Accessible, no jQuery,
