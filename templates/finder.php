@@ -44,12 +44,9 @@ $finder_total = count($steps);
 	<?php endif; ?>
 
 	<div class="plogins-finder__progress" data-finder-progress>
-		<div class="plogins-finder__progress-bar" role="progressbar"
-			aria-valuemin="1" aria-valuemax="<?php echo esc_attr((string) $finder_total); ?>"
-			aria-valuenow="1"
-			aria-label="<?php esc_attr_e('Quiz progress', 'elektilo'); ?>">
-			<span class="plogins-finder__progress-fill" data-finder-progress-fill></span>
-		</div>
+		<progress class="plogins-finder__progress-bar" data-finder-progress-bar
+			max="<?php echo esc_attr((string) $finder_total); ?>" value="1"
+			aria-label="<?php esc_attr_e('Quiz progress', 'elektilo'); ?>"></progress>
 		<p class="plogins-finder__progress-text" data-finder-progress-text aria-live="polite"></p>
 	</div>
 

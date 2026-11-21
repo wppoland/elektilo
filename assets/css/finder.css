@@ -59,19 +59,29 @@
 }
 
 .plogins-finder__progress-bar {
+	appearance: none;
+	display: block;
+	inline-size: 100%;
 	block-size: 8px;
+	border: 0 solid;
 	background: color-mix(in srgb, var(--finder-accent) 15%, #e9ecef);
 	border-radius: 999px;
-	overflow: hidden;
+	overflow: clip;
 }
 
-.plogins-finder__progress-fill {
-	display: block;
-	block-size: 100%;
-	inline-size: 0;
+.plogins-finder__progress-bar::-webkit-progress-bar {
+	background: transparent;
+}
+
+.plogins-finder__progress-bar::-webkit-progress-value {
 	background: var(--finder-accent);
-	border-radius: inherit;
-	transition: width 0.3s ease;
+	border-radius: 999px;
+	transition: inline-size 0.3s ease;
+}
+
+.plogins-finder__progress-bar::-moz-progress-bar {
+	background: var(--finder-accent);
+	border-radius: 999px;
 }
 
 .plogins-finder__progress-text {
@@ -401,7 +411,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.plogins-finder__progress-fill,
+	.plogins-finder__progress-bar::-webkit-progress-value {
+		transition: none;
+	}
+
 	.plogins-finder__option,
 	.plogins-finder__btn,
 	.plogins-finder-card__cta {
