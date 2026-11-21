@@ -54,8 +54,7 @@
 
 		var form = root.querySelector('[data-finder-form]');
 		var stepEls = Array.prototype.slice.call(root.querySelectorAll('[data-finder-step]'));
-		var progressFill = root.querySelector('[data-finder-progress-fill]');
-		var progressBar = root.querySelector('[role="progressbar"]');
+		var progressBar = root.querySelector('[data-finder-progress-bar]');
 		var progressText = root.querySelector('[data-finder-progress-text]');
 		var resultEl = root.querySelector('[data-finder-result]');
 		var footerEl = root.querySelector('[data-finder-footer]');
@@ -132,12 +131,8 @@
 
 		function updateProgress() {
 			var shown = Math.min(current + 1, total);
-			var pct = Math.round((shown / total) * 100);
-			if (progressFill) {
-				progressFill.style.width = pct + '%';
-			}
 			if (progressBar) {
-				progressBar.setAttribute('aria-valuenow', String(shown));
+				progressBar.value = shown;
 			}
 			if (progressText) {
 				progressText.textContent = format(t('step', 'Step {current} of {total}'), {
@@ -155,7 +150,7 @@
 			});
 			if (resultEl) {
 				resultEl.hidden = true;
-				resultEl.innerHTML = '';
+				resultEl.replaceChildren();
 			}
 			if (footerEl) {
 				footerEl.hidden = true;
@@ -180,7 +175,7 @@
 				return;
 			}
 			resultEl.hidden = false;
-			resultEl.innerHTML = '';
+			resultEl.replaceChildren();
 			var p = document.createElement('p');
 			p.className = 'plogins-finder__message';
 			p.textContent = message; // textContent, never markup from state.
