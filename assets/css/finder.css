@@ -365,29 +365,62 @@
 }
 
 /* Dark mode ----------------------------------------------------------- */
-@media (prefers-color-scheme: dark) {
+/* Dark mode follows the page's color scheme (set by the theme), not the OS. */
+@supports (color: light-dark(white, black)) {
 	.plogins-finder {
-		--finder-surface: #1e1f22;
-		--finder-border: #34373c;
-		--finder-text: #e6e7e9;
-		--finder-muted: #9ca3af;
+		--finder-surface: light-dark(#ffffff, #1e1f22);
+		--finder-border: light-dark(#e3e6ea, #34373c);
+		--finder-text: light-dark(#1f2329, #e6e7e9);
+		--finder-muted: light-dark(#6b7280, #9ca3af);
 	}
 
 	.plogins-finder__option {
-		background: #26282c;
+		background: light-dark(#fff, #26282c);
 	}
 
-	.plogins-finder__option:hover,
+	.plogins-finder__option:hover {
+		background: light-dark(color-mix(in srgb, var(--finder-accent) 6%, #fff), color-mix(in srgb, var(--finder-accent) 22%, #26282c));
+	}
+
 	.plogins-finder__option:has(input:checked) {
-		background: color-mix(in srgb, var(--finder-accent) 22%, #26282c);
+		background: light-dark(color-mix(in srgb, var(--finder-accent) 12%, #fff), color-mix(in srgb, var(--finder-accent) 22%, #26282c));
 	}
 
 	.plogins-finder-card {
-		background: color-mix(in srgb, var(--finder-success) 12%, #1e1f22);
+		background: light-dark(color-mix(in srgb, var(--finder-success) 5%, #fff), color-mix(in srgb, var(--finder-success) 12%, #1e1f22));
 	}
 
 	.plogins-finder-card__blurb {
-		color: #c3c7cc;
+		color: light-dark(#4b5563, #c3c7cc);
+	}
+}
+
+/* Browsers without light-dark() keep following the OS preference. */
+@supports not (color: light-dark(white, black)) {
+	@media (prefers-color-scheme: dark) {
+		.plogins-finder {
+			--finder-surface: #1e1f22;
+			--finder-border: #34373c;
+			--finder-text: #e6e7e9;
+			--finder-muted: #9ca3af;
+		}
+
+		.plogins-finder__option {
+			background: #26282c;
+		}
+
+		.plogins-finder__option:hover,
+		.plogins-finder__option:has(input:checked) {
+			background: color-mix(in srgb, var(--finder-accent) 22%, #26282c);
+		}
+
+		.plogins-finder-card {
+			background: color-mix(in srgb, var(--finder-success) 12%, #1e1f22);
+		}
+
+		.plogins-finder-card__blurb {
+			color: #c3c7cc;
+		}
 	}
 }
 
