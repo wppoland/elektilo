@@ -2,7 +2,7 @@
 Contributors: motylanogha
 Tags: woocommerce, product finder, product quiz, product recommendation, guided selling
 Requires at least: 6.5
-Tested up to: 7.1
+Tested up to: 7.2
 Requires PHP: 8.1
 Stable tag: 1.2.5
 License: GPLv2 or later
