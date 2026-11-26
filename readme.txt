@@ -4,7 +4,7 @@ Tags: woocommerce, product finder, product quiz, product recommendation, guided 
 Requires at least: 6.5
 Tested up to: 7.2
 Requires PHP: 8.1
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -132,6 +132,9 @@ Elektilo does not connect to, or send any data to, any external service or third
 All data stays inside your WordPress database: the questions, options, results map and settings live in the `finder_settings` option (with `finder_db_version` tracking the schema). When a shopper finishes the quiz, their answers are sent in a same-origin REST request to your site's own `/wp-json/` endpoint, which returns the recommendation; no outbound HTTP request is ever made. The current step and answers are also kept in the page URL and the browser's per-tab session storage so the quiz is resumable. Deleting the plugin removes its options.
 
 == Changelog ==
+
+= 1.2.6 =
+* Fixed: on themes that style every fieldset (Storefront among them) a quiz question sat outside a grey box. The quiz now resets the fieldset background and the question's margins.
 
 = 1.2.5 =
 * Changed: dark styling follows the theme's color scheme instead of the visitor's operating system, so widgets stay light on light themes; older browsers keep the previous behaviour.

@@ -97,13 +97,15 @@
 	margin: 0;
 	padding: 0;
 	border: 0;
+	background: none; /* themes such as Storefront tint every fieldset */
 }
 
 .plogins-finder__question {
 	display: block;
 	inline-size: 100%;
-	margin-block-end: 0.25em;
+	margin: 0 0 0.25em; /* Storefront pulls legends out with a negative inline margin */
 	padding: 0;
+	background: none;
 	font-size: clamp(1.1rem, 2.6vw, 1.35rem);
 	font-weight: 700;
 	line-height: 1.25;
